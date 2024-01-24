@@ -16,7 +16,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     const command = new QueryCommand({
         KeyConditionExpression: "userId = :userId",
         ExpressionAttributeValues: {
-          ":userId": { S: "test" },
+          ":userId": { S: event.requestContext.authorizer?.principalId },
         },
         TableName: process.env.TABLE_NAME,
       });

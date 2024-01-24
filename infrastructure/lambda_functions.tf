@@ -122,3 +122,27 @@ resource "aws_iam_role_policy_attachment" "table_data_present_policy_lambda_atta
   role       = module.data_presenter_fa.lambda_execution_role_name
   policy_arn = aws_iam_policy.table_data_present_policy.arn
 }
+
+###data-api-authorizer###
+module "data_api_authorizer_fa" {
+  source = "./modules/function_app"
+
+  function_name = "data-api-authorizer"
+  lambda_zip_path = "../.dist/data_api_authorizer_fa.zip"
+  lambda_source_code_path = "../data_api_authorizer_fa/.dist/"
+  lambda_subnet_id = aws_subnet.private_subnet.id
+  lambda_security_group_id = aws_default_security_group.default_security_group.id
+  lambda_function_environment = {
+    STAGE = terraform.workspace
+    API_ID = aws_api_gateway_rest_api.data_api_gateway.id
+  }
+}
+
+resource "aws_lambda_permission" "apigw_authorizer" {
+  statement_id  = "AllowAPIGatewayInvoke"
+  action        = "lambda:InvokeFunction"
+  function_name = "${module.data_api_authorizer_fa.lambda_function_name}"
+  principal     = "apigateway.amazonaws.com"
+
+  source_arn = "${aws_api_gateway_rest_api.data_api_gateway.execution_arn}/*/*"
+}

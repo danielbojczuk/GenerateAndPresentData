@@ -13,6 +13,7 @@ const createResponse = (responseObject:any, statusCode:number): APIGatewayProxyR
 const isRequestData = (value: RequestData): value is RequestData => !!value.informationOne && !!value.informationTwo;
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+    console.log(JSON.stringify(event));
     const invalidRequestErrorObject = { errorMessage: "Invalid request"};
     if(!event.body) {
         return createResponse(invalidRequestErrorObject,400);
@@ -22,12 +23,18 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     if(!isRequestData(dataRequest)) {
         return createResponse(invalidRequestErrorObject,400);
     }
+
+    const messageBody = {
+        userId: event.requestContext.authorizer?.principalId,
+        timestamp: Date.now(), 
+        ... dataRequest
+    }
     
     const client = new SQSClient({ region: "eu-west-1"});
 
     const command = new SendMessageCommand({
         QueueUrl: process.env.SQS_URL,     
-        MessageBody:event.body,
+        MessageBody: JSON.stringify(messageBody),
       });
     await client.send(command);
     return createResponse(undefined,201);

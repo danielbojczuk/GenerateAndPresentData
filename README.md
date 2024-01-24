@@ -8,6 +8,10 @@ This is a POC for an application of at least two components tha:
 ## Solution Diagram
 ![Solution Diagram](/assets/solution_diagram.png)
 
+## How it works
+- Use to generate JWT: http://jwtbuilder.jamiekurtz.com/
+
 ## Next Steps
 - Implement Dead Letter Queue
 - Improve application to support getting more then one queue item per lambda execution
+- Configure throthing for API

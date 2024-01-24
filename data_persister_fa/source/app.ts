@@ -8,11 +8,7 @@ const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient);
 export const lambdaHandler = async (event: SQSEvent): Promise<void> => {
     const command = new PutCommand({
         TableName: process.env.TABLE_NAME,
-        Item: {
-            userId: "test",
-            timestamp: Date.now(),
-            ...JSON.parse(event.Records[0].body),
-        },
+        Item: JSON.parse(event.Records[0].body),
       });
     
     await dynamoDbDocumentClient.send(command);

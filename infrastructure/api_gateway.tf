@@ -1,6 +1,6 @@
 resource "aws_api_gateway_rest_api" "data_api_gateway" {
  name = "data-api-gateway-${terraform.workspace}"
-   description = "Terraform Serverless Application Example"
+   description = "Data API"
 
 }
 
@@ -14,7 +14,8 @@ resource "aws_api_gateway_method" "data_post_method" {
   rest_api_id   = "${aws_api_gateway_rest_api.data_api_gateway.id}"
   resource_id   = "${aws_api_gateway_resource.data_resource.id}"
   http_method   = "POST"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
 }
 
 resource "aws_api_gateway_integration" "lambda_integration" {
@@ -30,7 +31,8 @@ resource "aws_api_gateway_method" "data_get_method" {
   rest_api_id   = "${aws_api_gateway_rest_api.data_api_gateway.id}"
   resource_id   = "${aws_api_gateway_resource.data_resource.id}"
   http_method   = "GET"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.apigw_authorizer.id
 }
 
 resource "aws_api_gateway_integration" "get_data_lambda_integration" {
@@ -54,4 +56,10 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   variables = {
     deployed_at = "${timestamp()}"
   }
+}
+
+resource "aws_api_gateway_authorizer" "apigw_authorizer" {
+  name                   = "api-gateway-authorizer"
+  rest_api_id            = aws_api_gateway_rest_api.data_api_gateway.id
+  authorizer_uri         = module.data_api_authorizer_fa.lambda_invoke_arn
 }
