@@ -10,13 +10,18 @@ jobs:
         uses: actions/checkout@v4
       - name: Build
         run: ./build.sh
-      - name: Copying infrastructure folder to artifacts
-        run: cp -R infrastructure .dist/
-      - name: Upload artifacts
+      - name: Upload lambda function artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: ./.dist/*
-          retention-days: 5
+          path: ./.dist/
+          retention-days: 1
+          name: build_${{ github.run_id }}
+      - name: Upload lambda function artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./infrastructure/
+          retention-days: 1
+          name: infrastructure_${{ github.run_id }}
   deploy-dev:
     name: Deploy DEV environment
     runs-on: ubuntu-latest
