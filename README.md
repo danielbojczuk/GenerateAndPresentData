@@ -15,3 +15,4 @@ This is a POC for an application of at least two components tha:
 - Implement Dead Letter Queue
 - Improve application to support getting more then one queue item per lambda execution
 - Configure throthing for API
+- Add a web interface using a SPA hosted in a S3 bucket distributed with Cloudfront
