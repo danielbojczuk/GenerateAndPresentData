@@ -20,6 +20,7 @@ jobs:
   deploy-dev:
     name: Deploy DEV environment
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: hashicorp/setup-terraform@v3
       - name: Terraform Init
