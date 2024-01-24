@@ -16,7 +16,7 @@ jobs:
           path: ./.dist/
           retention-days: 1
           name: build_${{ github.run_id }}
-      - name: Upload lambda function artifacts
+      - name: Upload infrastructure artifacts
         uses: actions/upload-artifact@v4
         with:
           path: ./infrastructure/
@@ -31,11 +31,16 @@ jobs:
       contents: read
     steps:
       - uses: hashicorp/setup-terraform@v3
-      - name: Download artifacts
+      - name: Download lamnda function artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ./
-          merge-multiple: true
+          name: build_${{ github.run_id }}
+          path: ./.dist/
+      - name: Download infrastructure artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: infrastructure_${{ github.run_id }}
+          path: ./infrastructure/
       - run: ls -R ./
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
