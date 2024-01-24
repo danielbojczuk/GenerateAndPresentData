@@ -33,6 +33,10 @@ jobs:
       - uses: hashicorp/setup-terraform@v3
       - name: Download artifacts
         uses: actions/download-artifact@v4
+        with:
+          path: ./
+          merge-multiple: true
+      - run: ls -R ./
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -40,12 +44,12 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: eu-west-1
       - name: Terraform Init
-        working-directory: ./artifact/infrastructure
+        working-directory: ./infrastructure
         run: terraform init
       - name: Select Workspace
-        working-directory: ./artifact/infrastructure
+        working-directory: ./infrastructure
         run: terraform workspace select dev
       - name: Terraform Plan
-        working-directory: ./artifact/infrastructure
+        working-directory: ./infrastructure
         run: terraform plan
     
