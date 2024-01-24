@@ -7,3 +7,7 @@ This is a POC for an application of at least two components tha:
 
 ## Solution Diagram
 ![Solution Diagram](/assets/solution_diagram.png)
+
+## Next Steps
+- Implement Dead Letter Queue
+

@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "SAM TS Webpack",
+            "type": "node",
+            "request": "attach",
+            "address": "localhost",
+            "port": 5858,
+            "localRoot": "${workspaceFolder}/data_generator_fa/.dist",
+            "remoteRoot": "/var/task",
+            "sourceMaps": true,
+            "skipFiles": [
+                "/var/runtime/**",
+                "<node_internals>/**"
+              ],
+              "outFiles": [
+                "${workspaceFolder}/data_generator_fa/.dist/app.js"
+            ],
+        }
+    ]
+}
