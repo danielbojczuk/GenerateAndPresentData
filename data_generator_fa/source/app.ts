@@ -5,12 +5,12 @@ import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 const createResponse = (responseObject:any, statusCode:number): APIGatewayProxyResult => {
     const response: APIGatewayProxyResult = {
         statusCode: statusCode,
-        body: JSON.stringify(responseObject)
+        body: responseObject? JSON.stringify(responseObject) : ""
     }
     return response;
 }
 
-const isRequestData = (value: RequestData): value is RequestData => !!value.InformationOne && !!value.InformationTwo;
+const isRequestData = (value: RequestData): value is RequestData => !!value.informationOne && !!value.informationTwo;
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const invalidRequestErrorObject = { errorMessage: "Invalid request"};
@@ -30,5 +30,5 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         MessageBody:event.body,
       });
     await client.send(command);
-    return createResponse({message:"test"},200);
+    return createResponse(undefined,201);
 };

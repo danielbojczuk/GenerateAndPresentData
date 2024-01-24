@@ -1,4 +1,4 @@
 export interface RequestData {
-    InformationOne: string
-    InformationTwo: string
+    informationOne: string
+    informationTwo: string
 }

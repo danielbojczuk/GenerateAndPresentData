@@ -26,9 +26,26 @@ resource "aws_api_gateway_integration" "lambda_integration" {
   uri = module.data_generator_fa.lambda_invoke_arn
 }
 
+resource "aws_api_gateway_method" "data_get_method" {
+  rest_api_id   = "${aws_api_gateway_rest_api.data_api_gateway.id}"
+  resource_id   = "${aws_api_gateway_resource.data_resource.id}"
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "get_data_lambda_integration" {
+  rest_api_id = aws_api_gateway_rest_api.data_api_gateway.id
+  resource_id = aws_api_gateway_resource.data_resource.id
+  http_method = aws_api_gateway_method.data_get_method.http_method
+  integration_http_method = "POST"
+  type = "AWS_PROXY"
+  uri = module.data_presenter_fa.lambda_invoke_arn
+}
+
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    aws_api_gateway_integration.lambda_integration
+    aws_api_gateway_integration.lambda_integration,
+    aws_api_gateway_integration.get_data_lambda_integration
   ]
 
   rest_api_id = "${aws_api_gateway_rest_api.data_api_gateway.id}"
@@ -37,13 +54,4 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   variables = {
     deployed_at = "${timestamp()}"
   }
-}
-
-resource "aws_lambda_permission" "apigw" {
-  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = "${module.data_generator_fa.lambda_function_name}"
-  principal     = "apigateway.amazonaws.com"
-
-  source_arn = "${aws_api_gateway_rest_api.data_api_gateway.execution_arn}/*/*"
 }

@@ -51,3 +51,11 @@ resource "aws_vpc_endpoint" "sqs_endpoint" {
   private_dns_enabled = true
   subnet_ids = [aws_subnet.private_subnet.id]
 }
+
+resource "aws_vpc_endpoint" "dynamodb_endpoint" {
+  vpc_id       = aws_vpc.main_vpc.id
+  service_name = "com.amazonaws.eu-west-1.dynamodb"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids = [ aws_vpc.main_vpc.default_route_table_id ]
+}
+

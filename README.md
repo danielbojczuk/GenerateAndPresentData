@@ -10,4 +10,4 @@ This is a POC for an application of at least two components tha:
 
 ## Next Steps
 - Implement Dead Letter Queue
-
+- Improve application to support getting more then one queue item per lambda execution

@@ -1,10 +1,10 @@
 {
-  "name": "data_generator_fa",
+  "name": "data_persister_fa",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rm -rf .dist && npx webpack",
+    "build": "rm -rf .dist && npm install && npx webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -18,7 +18,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.496.0",
+    "@aws-sdk/client-dynamodb": "^3.496.0",
+    "@aws-sdk/lib-dynamodb": "^3.496.0",
     "aws-lambda": "^1.0.7"
   }
 }
