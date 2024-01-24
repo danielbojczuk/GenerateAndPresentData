@@ -10,8 +10,22 @@ jobs:
         uses: actions/checkout@v4
       - name: Build
         run: ./build.sh
+      - name: Copying infrastructure folder to artifacts
+        run: cp -R infrastructure .dist/
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          path: ./.dist/*.zip
+          path: ./.dist/*
           retention-days: 5
+  deploy-dev:
+    name: Deploy DEV environment
+    run-on: ubuntu-latest
+    steps:
+      - uses: hashicorp/setup-terraform@v3
+      - name: Terraform Init
+        run: terraform init
+      - name: Select Workspace
+        run: terraform workspace select dev
+      - name: Terraform Plan
+        run: terraform plan
+    

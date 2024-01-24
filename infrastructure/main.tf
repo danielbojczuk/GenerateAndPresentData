@@ -16,4 +16,9 @@ terraform {
       version = ">= 5.33.0"
     }
   }
+  backend "s3" {
+    bucket = "generate-and-presend-data-backend"
+    key    = "GenerateAndPresentData"
+    region = "eu-west-1"
+  }
 }
