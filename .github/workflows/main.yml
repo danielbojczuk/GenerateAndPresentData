@@ -53,7 +53,7 @@ jobs:
       - name: Select Workspace
         working-directory: ./infrastructure
         run: terraform workspace select dev
-      - name: Terraform Plan
+      - name: Terraform Apply
         working-directory: ./infrastructure
-        run: terraform aply -auto-approve
+        run: terraform apply -auto-approve
     
