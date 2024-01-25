@@ -2,20 +2,18 @@ name: GitHub Actions Generate and Present Data
 run-name: Generate and Present Data CI/CD pipeline
 on: [push]
 jobs:
-  build:
-    name: Build
+  build_data_api_authorizer:
+    uses: ./.github/workflows/build.yml
+    permissions:
+      id-token: write
+      contents: read
+    with:
+      lambdaFunction: data_api_authorizer_fa
+  Infrastructure:
+    name: Infrastructure
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build
-        run: ./build.sh
-      - name: Upload lambda function artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          path: ./.dist/
-          retention-days: 1
-          name: build_${{ github.run_id }}
+    needs: build_data_api_authorizer
+    steps:     
       - name: Upload infrastructure artifacts
         uses: actions/upload-artifact@v4
         with:

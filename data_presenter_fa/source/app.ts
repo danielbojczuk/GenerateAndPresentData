@@ -1,9 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import AWSXRay from 'aws-xray-sdk'
+import { ResponseObject } from './model/responseObject';
 
 
-const createResponse = (responseObject:any, statusCode:number): APIGatewayProxyResult => {
+const createResponse = (responseObject:ResponseObject[] | undefined, statusCode:number): APIGatewayProxyResult => {
     const response: APIGatewayProxyResult = {
         statusCode: statusCode,
         body: JSON.stringify(responseObject)
@@ -22,7 +23,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         TableName: process.env.TABLE_NAME,
       });
     const dynamoResponse = await dynamoDbClient.send(command);
-    const response = dynamoResponse.Items?.map((i) => {return {
+    const response: ResponseObject[] | undefined= dynamoResponse.Items?.map((i) => { return {
         User: i.userId.S,
         Date: i.timestamp.N,
         InformationOne: i.informationOne.S,
@@ -30,3 +31,4 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
     }});
     return createResponse(response,200);
 };
+

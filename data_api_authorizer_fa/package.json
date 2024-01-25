@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "npx eslint source/",
     "build": "rm -rf .dist && npm install && npx webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,6 +13,9 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.131",
     "@types/jsonwebtoken": "^9.0.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "eslint": "^8.56.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",

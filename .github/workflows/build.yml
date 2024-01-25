@@ -1,0 +1,39 @@
+name: Build Action
+run-name: Test, Lint and Build the project
+on:
+  workflow_call:
+    inputs:
+        lambdaFunction:
+          required: true
+          type: string
+jobs:
+  deploy:
+    name: Build project
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Modules
+        working-directory: ./${{ inputs.lambdaFunction }}
+        run: npm ci
+      - name: Linting check
+        working-directory: ./${{ inputs.lambdaFunction }}
+        run: npm run lint
+      - name: Unit test
+        working-directory: ./${{ inputs.lambdaFunction }}
+        run: npm run lint
+      - name: Build
+        working-directory: ./${{ inputs.lambdaFunction }}
+        run: npm run build
+      - name: Zipping
+        working-directory: ./${{ inputs.lambdaFunction }}/.dist/
+        run: zip -r ./${{ inputs.lambdaFunction }}.zip .
+      - name: Upload lambda function artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: ./.dist/${{ inputs.lambdaFunction }}.zip
+          retention-days: 1
+          name: ${{ inputs.lambdaFunction }}_${{ github.run_id }}

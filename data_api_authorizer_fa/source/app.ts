@@ -1,4 +1,4 @@
-import { APIGatewayTokenAuthorizerEvent, AuthResponse, Context, PolicyDocument } from 'aws-lambda'
+import { APIGatewayTokenAuthorizerEvent, AuthResponse, Context, PolicyDocument, Statement } from 'aws-lambda'
 import jwt from 'jsonwebtoken'
 
 function generateStatement(resource:string, effect: string) {
@@ -10,7 +10,7 @@ function generateStatement(resource:string, effect: string) {
 }
 
 function generateAllowPolicy (roles:string[], accountId: string): PolicyDocument {
-    const statements: any[] = [];
+    const statements:Statement[] = [];
     roles.forEach((role:string) => {
         if(role == "data.read") {
             statements.push(generateStatement(`arn:aws:execute-api:eu-west-1:${accountId}:${process.env.API_ID}/${process.env.STAGE}/GET/data`, "Allow"))
