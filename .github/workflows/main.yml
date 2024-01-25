@@ -1,6 +1,9 @@
 name: GitHub Actions Generate and Present Data
 run-name: Generate and Present Data CI/CD pipeline
-on: [push]
+on: 
+  push:
+    branches:
+     - main
 jobs:
   build_data_api_authorizer_fa:
     uses: ./.github/workflows/build.yml
@@ -47,6 +50,9 @@ jobs:
     name: Integration tests
     runs-on: ubuntu-latest
     needs: deploy-dev
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
