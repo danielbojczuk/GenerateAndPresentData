@@ -43,9 +43,19 @@ jobs:
       contents: read
     with:
       environment: dev
+  integration-test:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    needs: deploy-dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4 
+      - name: Run Integration Test
+        working-directory: ./integration_tests
+        run: ./integrationTest.sh
   deploy-prd:
     uses: ./.github/workflows/deployment.yml
-    needs: deploy-dev
+    needs: integration-test
     permissions:
       id-token: write
       contents: read
