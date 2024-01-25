@@ -22,7 +22,7 @@ jobs:
     name: Infrastructure
     runs-on: ubuntu-latest
     needs: 
-      - build_data_api_authorizer
+      - build_data_api_authorizer_fa
       - build_data_generator_fa
       - build_data_persister_fa
       - build_data_presenter_fa
