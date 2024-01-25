@@ -1,8 +1,9 @@
 import { SQSEvent } from 'aws-lambda';
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import AWSXRay from 'aws-xray-sdk'
 
-const dynamoDbClient = new DynamoDBClient({});
+const dynamoDbClient = AWSXRay.captureAWSv3Client(new DynamoDBClient({}));
 const dynamoDbDocumentClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 export const lambdaHandler = async (event: SQSEvent): Promise<void> => {

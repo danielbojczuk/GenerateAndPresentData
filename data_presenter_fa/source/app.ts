@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
+import AWSXRay from 'aws-xray-sdk'
 
 
 const createResponse = (responseObject:any, statusCode:number): APIGatewayProxyResult => {
@@ -10,7 +11,7 @@ const createResponse = (responseObject:any, statusCode:number): APIGatewayProxyR
     return response;
 }
 
-const client = new DynamoDBClient({region: "eu-west-1"});
+const dynamoDbClient = AWSXRay.captureAWSv3Client(new DynamoDBClient({}));
 
 export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const command = new QueryCommand({
@@ -20,7 +21,7 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         },
         TableName: process.env.TABLE_NAME,
       });
-    const dynamoResponse = await client.send(command);
+    const dynamoResponse = await dynamoDbClient.send(command);
     const response = dynamoResponse.Items?.map((i) => {return {
         User: i.userId.S,
         Date: i.timestamp.N,

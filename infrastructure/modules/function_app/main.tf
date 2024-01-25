@@ -5,6 +5,13 @@ resource "aws_lambda_function" "data_generator" {
     function_name = "${var.function_name}-${terraform.workspace}"
     source_code_hash = filebase64sha256(var.lambda_zip_path)
     role = aws_iam_role.iam_for_lambda.arn
+    logging_config {
+      log_format = "Text"
+      log_group = aws_cloudwatch_log_group.lambda_function_log_group.name
+    }
+    tracing_config {
+      mode = "Active"
+    }	
     timeout = 30
     depends_on = [
         null_resource.build_lambda_function
@@ -63,7 +70,12 @@ EOF
         {
           Action   = ["logs:PutLogEvents",
                       "logs:CreateLogStream",
-                      "logs:CreateLogGroup"]
+                      "logs:CreateLogGroup",
+                      "xray:PutTraceSegments",
+                      "xray:PutTelemetryRecords",
+                      "xray:GetSamplingRules",
+                      "xray:GetSamplingTargets",
+                      "xray:GetSamplingStatisticSummaries"]
           Effect   = "Allow"
           Resource = "*"
         },
@@ -90,4 +102,10 @@ EOF
   ]
 })
   }
+}
+
+resource "aws_cloudwatch_log_group" "lambda_function_log_group" {
+  name = "/aws/lambda/${var.function_name}-${terraform.workspace}"
+
+  retention_in_days = 7
 }

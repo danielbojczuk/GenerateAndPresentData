@@ -1,6 +1,9 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { RequestData } from './domain/model/requestData'
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
+import AWSXRay from 'aws-xray-sdk'
+
+const client = AWSXRay.captureAWSv3Client(new SQSClient({ region: "eu-west-1"}));
 
 const createResponse = (responseObject:any, statusCode:number): APIGatewayProxyResult => {
     const response: APIGatewayProxyResult = {
@@ -30,7 +33,6 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
         ... dataRequest
     }
     
-    const client = new SQSClient({ region: "eu-west-1"});
 
     const command = new SendMessageCommand({
         QueueUrl: process.env.SQS_URL,     
