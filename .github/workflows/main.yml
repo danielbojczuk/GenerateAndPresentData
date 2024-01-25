@@ -23,6 +23,6 @@ jobs:
           retention-days: 1
           name: infrastructure_${{ github.run_id }}
   deploy-dev:
-    uses: ./deployment.yml@${{ github.ref_name }}
+    uses: ./deployment.yml@main
     with:
       environment: dev
