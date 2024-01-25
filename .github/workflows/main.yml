@@ -9,7 +9,7 @@ jobs:
       contents: read
     with:
       lambdaFunction: data_api_authorizer_fa
-  Infrastructure:
+  infrastructure:
     name: Infrastructure
     runs-on: ubuntu-latest
     needs: build_data_api_authorizer
@@ -22,7 +22,7 @@ jobs:
           name: infrastructure_${{ github.run_id }}
   deploy-dev:
     uses: ./.github/workflows/deployment.yml
-    needs: build
+    needs: infrastructure
     permissions:
       id-token: write
       contents: read
