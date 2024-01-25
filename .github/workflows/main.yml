@@ -24,5 +24,6 @@ jobs:
           name: infrastructure_${{ github.run_id }}
   deploy-dev:
     uses: ./.github/workflows/deployment.yml
+    needs: build
     with:
       environment: dev
