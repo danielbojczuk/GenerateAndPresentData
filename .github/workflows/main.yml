@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: GitHub Actions Generate and Present Data
 run-name: Generate and Present Data CI/CD pipeline
 on: [push]
 jobs:
@@ -23,37 +23,6 @@ jobs:
           retention-days: 1
           name: infrastructure_${{ github.run_id }}
   deploy-dev:
-    name: Deploy DEV environment
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - uses: hashicorp/setup-terraform@v3
-      - name: Download lamnda function artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build_${{ github.run_id }}
-          path: ./.dist/
-      - name: Download infrastructure artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: infrastructure_${{ github.run_id }}
-          path: ./infrastructure/
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::662642131450:role/GitHub
-          role-session-name: GitHub_to_AWS_via_FederatedOIDC
-          aws-region: eu-west-1
-      - name: Terraform Init
-        working-directory: ./infrastructure
-        run: terraform init
-      - name: Select Workspace
-        working-directory: ./infrastructure
-        run: terraform workspace select dev
-      - name: Terraform Apply
-        working-directory: ./infrastructure
-        run: terraform apply -auto-approve
-    
+    uses: ./deployment.yml
+    with:
+      environment: dev
