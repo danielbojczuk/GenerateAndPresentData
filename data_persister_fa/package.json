@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "lint": "npx eslint source/",
-    "build": "rm -rf .dist && npm install && npx webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "rm -rf .dist && npx webpack",
+    "test": "echo \"No unit tests available\""
   },
   "author": "",
   "license": "ISC",

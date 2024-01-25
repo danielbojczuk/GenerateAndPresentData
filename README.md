@@ -19,3 +19,4 @@ This is a POC for an application of at least two components tha:
 - Add terraform plan and manual steps to check the plan output before deploy
 - Add other metrics/alarms
 - Change e-mail notification for better approach
+- Remove region and other hardcoded configurations
