@@ -15,10 +15,25 @@ jobs:
       contents: read
     steps:
       - uses: hashicorp/setup-terraform@v3
-      - name: Download lamnda function artifacts
+      - name: Download data_api_authorizer_fa_${{ github.run_id }}
         uses: actions/download-artifact@v4
         with:
-          name: build_${{ github.run_id }}
+          name: data_api_authorizer_fa_${{ github.run_id }}
+          path: ./.dist/
+      - name: Download data_generator_fa_${{ github.run_id }}
+        uses: actions/download-artifact@v4
+        with:
+          name: data_generator_fa_${{ github.run_id }}
+          path: ./.dist/
+      - name: Download data_persister_fa_${{ github.run_id }}
+        uses: actions/download-artifact@v4
+        with:
+          name: data_persister_fa_${{ github.run_id }}
+          path: ./.dist/
+      - name: Download data_presenter_fa_${{ github.run_id }}
+        uses: actions/download-artifact@v4
+        with:
+          name: data_presenter_fa_${{ github.run_id }}
           path: ./.dist/
       - name: Download infrastructure artifacts
         uses: actions/download-artifact@v4
