@@ -30,9 +30,9 @@ jobs:
       contents: read
     with:
       environment: dev
-  deploy-dev:
+  deploy-prd:
     uses: ./.github/workflows/deployment.yml
-    needs: build
+    needs: deploy-dev
     permissions:
       id-token: write
       contents: read
