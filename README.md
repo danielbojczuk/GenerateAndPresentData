@@ -4,7 +4,7 @@ This is a POC for an application with at least two components that:
 
 - Generates data.
 - Uses asynchronous communication to send the generated data to another instance, which persists the data to static storage of your choice.
-- Serves the persisted data in a web app.
+- Web app that serves the persisted data in any way.
 
 ## Solution
 
